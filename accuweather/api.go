@@ -15,8 +15,6 @@ import (
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
-const ApiKey = "OlZjGvzcWIQkQT7I7WJk0aZsAsEOnD55"
-
 type GeoPositionService struct {
 	Token string
 }
