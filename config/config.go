@@ -36,13 +36,11 @@ func New() *Config {
 		),
 		ResponseContext: ReadEnv(
 			"POT_RESPONSE_CONTEXT",
-			"https://standards-ontotest.oftrust.net/v2/Context"+
-				"/DataProductOutput/Forecast/Weather/AccuWeather/",
+			"https://standards.oftrust.net/v2/Context/DataProductOutput/Forecast/Weather/AccuWeather/",
 		),
 		ParameterContext: ReadEnv(
 			"POT_PARAMETER_CONTEXT",
-			"https://standards-ontotest.oftrust.net/v2/Context"+
-				"/DataProductParameters/Forecast/Weather/AccuWeather/",
+			"https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather/AccuWeather/",
 		),
 	}
 

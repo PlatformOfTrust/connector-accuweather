@@ -3,7 +3,7 @@ package main
 var requestSchema string = `
 {
 	"$schema": "http://json-schema.org/draft-06/schema#",
-	"$id": "https://standards-ontotest.oftrust.net/v2/Schema/DataProductParameters/Forecast/Weather/AccuWeather",
+	"$id": "https://standards.oftrust.net/v2/Schema/DataProductParameters/Forecast/Weather/AccuWeather",
 	"required": [
 		"@context",
 		"timestamp",
@@ -14,7 +14,7 @@ var requestSchema string = `
 		"@context": {
 			"type": "string",
 			"description": "The context to be used for the payload.",
-			"const": "https://standards-ontotest.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather/"
+			"const": "https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather/"
 		},
 		"timestamp": {
 			"type": "string",

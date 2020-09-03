@@ -45,8 +45,8 @@ POT_SECRET={platform of trust secret for the connector}
 POT_CREATOR=https://example.com/public-key
 
 # The URI of the context that will be used for the data payload 
-POT_RESPONSE_CONTEXT=https://standards-ontotest.oftrust.net/v2/Context/DataProductOutput/ForecastDataProductOutput/AccuWeatherDataProductOutput/
+POT_RESPONSE_CONTEXT=https://standards.oftrust.net/v2/Context/DataProductOutput/Forecast/Weather/AccuWeather/
 
 # The URI of the context that will be used for the parameters payload 
-POT_PARAMETER_CONTEXT=https://standards-ontotest.oftrust.net/v2/Context/DataProductParameters/ForecastDataProductParameters/AccuWeatherDataProductParameters/
+POT_PARAMETER_CONTEXT=https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather/AccuWeather/
 ```
