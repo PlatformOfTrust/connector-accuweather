@@ -1,6 +1,8 @@
 package config
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -9,8 +11,9 @@ import (
 
 type Config struct {
 	Port             string
-	Secret           []byte
-	Creator          string
+	PotPublicKey     *rsa.PublicKey
+	PublicKey        *rsa.PublicKey
+	PrivateKey       *rsa.PrivateKey
 	ResponseContext  string
 	ParameterContext string
 	AccuweatherToken string
@@ -23,17 +26,14 @@ func New() *Config {
 		log.Warn().Msg("No .env file found")
 	}
 
+	privateKey, _ := rsa.GenerateKey(rand.Reader, 4096)
+
 	return &Config{
-		Port: ReadEnv("PORT", "8080"),
-		Secret: []byte(ReadEnv(
-			"POT_SECRET",
-			"P8qNkpXkfLe_OQa_2ydHRgzFR2_GuIoyUoMtf8zcLZ0",
-		)),
+		Port:             ReadEnv("PORT", "8080"),
+		PotPublicKey:     &privateKey.PublicKey,
+		PublicKey:        &privateKey.PublicKey,
+		PrivateKey:       privateKey,
 		AccuweatherToken: ReadEnv("ACCUWEATHER_TOKEN", ""),
-		Creator: ReadEnv(
-			"POT_CREATOR",
-			"https://example.com/public-key",
-		),
 		ResponseContext: ReadEnv(
 			"POT_RESPONSE_CONTEXT",
 			"https://standards.oftrust.net/v2/Context/DataProductOutput/Forecast/Weather/AccuWeather/",

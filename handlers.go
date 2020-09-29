@@ -1,6 +1,9 @@
 package main
 
 import (
+	"bytes"
+	"crypto/x509"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -11,7 +14,7 @@ import (
 
 	"github.com/PlatformOfTrust/connector-accuweather/config"
 	"github.com/PlatformOfTrust/connector-accuweather/models"
-	"github.com/holdatech/gopot/v2"
+	"github.com/holdatech/gopot/v3"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/rs/zerolog"
@@ -99,12 +102,14 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Encode the signature payload as json
-	signature, err := gopot.CreateSignature(responseSignatureData, s.Config.Secret)
+	signature, err := gopot.CreateSignature(responseSignatureData, s.Config.PrivateKey)
 	if err != nil {
 		log.Error().Err(err).Msg("")
 		writeError(w, "failed to sign the response", 500)
 		return
 	}
+
+	creator := fmt.Sprintf("%s%s/public-key", r.Proto, r.Host)
 
 	// Construct the response payload
 	response := &models.ForecastResponse{
@@ -117,7 +122,7 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 		Signature: models.ForecastSignature{
 			Type:           "RsaSignature2018",
 			Created:        created,
-			Creator:        s.Config.Creator,
+			Creator:        creator,
 			SignatureValue: signature,
 		},
 	}
@@ -132,6 +137,19 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 
 	// Write the response data to the response
 	w.Write(jData)
+}
+
+func (s *RequestHandler) ServePublicKey(w http.ResponseWriter, r *http.Request) {
+	block := &pem.Block{
+		Type:  "PUBLIC KEY",
+		Bytes: x509.MarshalPKCS1PublicKey(s.Config.PublicKey),
+	}
+
+	pub := &bytes.Buffer{}
+
+	pem.Encode(pub, block)
+
+	w.Write(pub.Bytes())
 }
 
 func healthCheck(w http.ResponseWriter, r *http.Request) {

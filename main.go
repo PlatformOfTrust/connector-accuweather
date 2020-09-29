@@ -5,7 +5,7 @@ import (
 
 	"github.com/PlatformOfTrust/connector-accuweather/accuweather"
 	"github.com/PlatformOfTrust/connector-accuweather/config"
-	"github.com/holdatech/gopot/v2"
+	"github.com/holdatech/gopot/v3"
 
 	"github.com/go-chi/chi"
 )
@@ -24,7 +24,7 @@ func main() {
 		},
 	}
 
-	signatureVerifier := gopot.SignatureVerifierMiddleware(conf.Secret)
+	signatureVerifier := gopot.SignatureVerifierMiddleware(conf.PotPublicKey)
 
 	router := chi.NewRouter()
 
@@ -33,6 +33,7 @@ func main() {
 	router.Get("/schemas", handleGetSchemas)
 	router.Get("/schemas/{schemaName}", handleGetSchema)
 	router.With(signatureVerifier).Post("/fetch", rs.Fetch)
+	router.Get("/public-key", rs.ServePublicKey)
 	router.Get("/health", healthCheck)
 
 	server := http.Server{

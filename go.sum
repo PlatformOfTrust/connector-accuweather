@@ -175,8 +175,11 @@ github.com/hashicorp/go-version v1.2.0/go.mod h1:fltr4n8CU8Ke44wwGCBoEymUuxUHl09
 github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hashicorp/hcl v1.0.0/go.mod h1:E5yfLk+7swimpb2L/Alb/PJmXilQ/rhwaUYs4T20WEQ=
+github.com/holdatech/gopot v1.0.2 h1:2G/4ivGPUtOd13iTo/sTuZ+WEc6BPU9U3BNPLciNzLA=
 github.com/holdatech/gopot/v2 v2.1.0 h1:kk1vQd6+Y6K+Zxhi4DCUxx8bO1ah8AJwYaVnJHd1tXM=
 github.com/holdatech/gopot/v2 v2.1.0/go.mod h1:8NclxmmgcTXEcsqeKJ5tJw0BDfcnu5pokARgO3VXexc=
+github.com/holdatech/gopot/v3 v3.0.0 h1:W8fGCi/GnFo9NfglElzUhZzk8FLKgktsYC13zjnffZY=
+github.com/holdatech/gopot/v3 v3.0.0/go.mod h1:eMtUPZ55m0z1RtpgCIygRB85u/7Y/Z3/Jr8g9aAgofk=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
 github.com/iancoleman/orderedmap v0.0.0-20190318233801-ac98e3ecb4b0 h1:i462o439ZjprVSFSZLZxcsoAe592sZB1rci2Z8j4wdk=
 github.com/iancoleman/orderedmap v0.0.0-20190318233801-ac98e3ecb4b0/go.mod h1:N0Wam8K1arqPXNWjMo21EXnBPOPp36vB07FNRdD2geA=
