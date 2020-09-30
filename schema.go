@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"context"
-
 	"github.com/alecthomas/jsonschema"
 	"github.com/go-chi/chi"
-	jsc "github.com/qri-io/jsonschema"
+	"github.com/go-playground/validator/v10"
 )
 
 var schemas = make(map[string][]byte)
@@ -56,30 +54,23 @@ func handleGetSchemas(w http.ResponseWriter, r *http.Request) {
 }
 
 type ValidationError struct {
-	ValidationErrors []jsc.KeyError
+	ValidationErrors []validator.FieldError
 }
 
 func (e ValidationError) Error() string {
 	var errs string
 	for _, er := range e.ValidationErrors {
-		errs = fmt.Sprintf(`%s%s with value: %v, %s; `, errs, er.PropertyPath, er.InvalidValue, er.Message)
+		errs = fmt.Sprintf(`%s%s`, errs, er.Error())
 	}
 	return errs
 }
 
-func validateSchema(schemaName string, data []byte) error {
-	schema := schemas[schemaName]
+var validate = validator.New()
 
-	ctx := context.TODO()
-
-	rs := &jsc.Schema{}
-	err := json.Unmarshal(schema, rs)
+func validateParams(data interface{}) error {
+	err := validate.Struct(data)
 	if err != nil {
-		return err
-	}
-
-	verr, err := rs.ValidateBytes(ctx, data)
-	if err != nil {
+		verr := err.(validator.ValidationErrors)
 		return ValidationError{
 			ValidationErrors: verr,
 		}

@@ -63,15 +63,15 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// validate the schema
-	err = validateSchema("/schemas/params", rbody)
+	// validate the params
+	err = validateParams(req)
 	if err != nil {
 		if errors.As(err, &ValidationError{}) {
 			writeError(w, err, fmt.Sprintf("failed to validate the request: %s", err.Error()), 400)
 			return
 		}
 
-		writeError(w, err, "failed to read the validation schema", 500)
+		writeError(w, err, "failed to validate the request", 500)
 		return
 	}
 
