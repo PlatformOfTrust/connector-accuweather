@@ -5,18 +5,20 @@ import (
 	"crypto/rsa"
 	"os"
 
+	"github.com/PlatformOfTrust/connector-accuweather/keyutil"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 )
 
 type Config struct {
 	Port             string
-	PotPublicKey     *rsa.PublicKey
+	PotPublicKeys    []*rsa.PublicKey
 	PublicKey        *rsa.PublicKey
 	PrivateKey       *rsa.PrivateKey
 	ResponseContext  string
 	ParameterContext string
 	AccuweatherToken string
+	BypassSignature  bool
 }
 
 func New() *Config {
@@ -28,9 +30,21 @@ func New() *Config {
 
 	privateKey, _ := rsa.GenerateKey(rand.Reader, 4096)
 
+	publicKeys, err := keyutil.LoadRsaKeys([]string{
+		"https://static.oftrust.net/keys/translator.pub",
+		"https://static-sandbox.oftrust.net/keys/translator.pub",
+		"https://static-staging.oftrust.net/keys/translator.pub",
+		"https://static-test.oftrust.net/keys/translator.pub",
+	})
+
+	if err != nil {
+		log.Warn().Msg("Failed to load some of the public keys")
+	}
+
 	return &Config{
 		Port:             ReadEnv("PORT", "8080"),
-		PotPublicKey:     &privateKey.PublicKey,
+		BypassSignature:  (ReadEnv("BYPASS_SIGNATURE", "") != ""),
+		PotPublicKeys:    publicKeys,
 		PublicKey:        &privateKey.PublicKey,
 		PrivateKey:       privateKey,
 		AccuweatherToken: ReadEnv("ACCUWEATHER_TOKEN", ""),

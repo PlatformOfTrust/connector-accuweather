@@ -180,6 +180,8 @@ github.com/holdatech/gopot/v2 v2.1.0 h1:kk1vQd6+Y6K+Zxhi4DCUxx8bO1ah8AJwYaVnJHd1
 github.com/holdatech/gopot/v2 v2.1.0/go.mod h1:8NclxmmgcTXEcsqeKJ5tJw0BDfcnu5pokARgO3VXexc=
 github.com/holdatech/gopot/v3 v3.0.0 h1:W8fGCi/GnFo9NfglElzUhZzk8FLKgktsYC13zjnffZY=
 github.com/holdatech/gopot/v3 v3.0.0/go.mod h1:eMtUPZ55m0z1RtpgCIygRB85u/7Y/Z3/Jr8g9aAgofk=
+github.com/holdatech/gopot/v4 v4.0.0 h1:yx/K4pXCRG/A/xspOX0gOufl5hy20nq/zEWrSO4+CiI=
+github.com/holdatech/gopot/v4 v4.0.0/go.mod h1:w0kdLO+sY64niZgPj1fQ0DJA1SLpiT2kMCdkna+Q+F0=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
 github.com/iancoleman/orderedmap v0.0.0-20190318233801-ac98e3ecb4b0 h1:i462o439ZjprVSFSZLZxcsoAe592sZB1rci2Z8j4wdk=
 github.com/iancoleman/orderedmap v0.0.0-20190318233801-ac98e3ecb4b0/go.mod h1:N0Wam8K1arqPXNWjMo21EXnBPOPp36vB07FNRdD2geA=

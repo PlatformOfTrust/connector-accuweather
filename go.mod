@@ -8,6 +8,7 @@ require (
 	github.com/goreleaser/goreleaser v0.137.0
 	github.com/holdatech/gopot/v2 v2.1.0
 	github.com/holdatech/gopot/v3 v3.0.0
+	github.com/holdatech/gopot/v4 v4.0.0
 	github.com/joho/godotenv v1.3.0
 	github.com/json-iterator/go v1.1.10
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect

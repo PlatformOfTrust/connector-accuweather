@@ -14,7 +14,7 @@ import (
 
 	"github.com/PlatformOfTrust/connector-accuweather/config"
 	"github.com/PlatformOfTrust/connector-accuweather/models"
-	"github.com/holdatech/gopot/v3"
+	"github.com/holdatech/gopot/v4"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/rs/zerolog"
@@ -109,7 +109,11 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	creator := fmt.Sprintf("%s%s/public-key", r.Proto, r.Host)
+	// Define the url to download the public key
+	if r.URL.Scheme == "" {
+		r.URL.Scheme = "http"
+	}
+	creator := fmt.Sprintf("%s://%s/public-key", r.URL.Scheme, r.Host)
 
 	// Construct the response payload
 	response := &models.ForecastResponse{
