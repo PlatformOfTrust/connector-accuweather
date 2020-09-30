@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -17,13 +16,8 @@ import (
 	"github.com/holdatech/gopot/v4"
 
 	jsoniter "github.com/json-iterator/go"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
-
-func init() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-}
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
@@ -37,7 +31,8 @@ type ResponseError struct {
 	Status int    `json:"status"`
 }
 
-func writeError(w http.ResponseWriter, msg string, errcode int) {
+func writeError(w http.ResponseWriter, err error, msg string, errcode int) {
+	log.Error().Err(err).Msg(msg)
 	res := &ResponseError{
 		Error:  fmt.Sprintf("%s: %s", http.StatusText(errcode), msg),
 		Status: errcode,
@@ -50,8 +45,7 @@ func writeError(w http.ResponseWriter, msg string, errcode int) {
 func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 	rbody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Error().Err(err).Msg("")
-		writeError(w, "failed to read the request body", 400)
+		writeError(w, err, "failed to read the request body", 400)
 		return
 	}
 
@@ -59,14 +53,13 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 	req := &models.RequestParameters{}
 	err = json.Unmarshal(rbody, req)
 	if err != nil {
-		log.Error().Err(err).Msg("")
-		writeError(w, "failed to parse the request", 400)
+		writeError(w, err, "failed to parse the request", 400)
 		return
 	}
 
 	// validate the context
 	if strings.TrimSuffix(req.Context, "/") != strings.TrimSuffix(s.Config.ParameterContext, "/") {
-		writeError(w, "context mismatch", 400)
+		writeError(w, nil, "context mismatch", 400)
 		return
 	}
 
@@ -74,21 +67,18 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 	err = validateSchema("/schemas/params", rbody)
 	if err != nil {
 		if errors.As(err, &ValidationError{}) {
-			log.Error().Err(err).Msg("failed to validate the request")
-			writeError(w, fmt.Sprintf("failed to validate the request: %s", err.Error()), 400)
+			writeError(w, err, fmt.Sprintf("failed to validate the request: %s", err.Error()), 400)
 			return
 		}
 
-		log.Error().Err(err).Msg("failed to read the validation schema")
-		writeError(w, "failed to read the validation schema", 400)
+		writeError(w, err, "failed to read the validation schema", 500)
 		return
 	}
 
 	// Fetch the forecast
 	forecast, err := s.ForecastService.Get(&req.Parameters)
 	if err != nil {
-		log.Error().Err(err).Msg("")
-		writeError(w, "failed to fetch the forecast", 500)
+		writeError(w, err, "failed to fetch the forecast", 500)
 		return
 	}
 
@@ -104,8 +94,7 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 	// Encode the signature payload as json
 	signature, err := gopot.CreateSignature(responseSignatureData, s.Config.PrivateKey)
 	if err != nil {
-		log.Error().Err(err).Msg("")
-		writeError(w, "failed to sign the response", 500)
+		writeError(w, err, "failed to sign the response", 500)
 		return
 	}
 
@@ -134,8 +123,7 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 	// Encode the response to json
 	jData, err := json.Marshal(response)
 	if err != nil {
-		log.Error().Err(err).Msg("")
-		writeError(w, "failed to encode the response", 500)
+		writeError(w, err, "failed to encode the response", 500)
 		return
 	}
 
@@ -144,9 +132,10 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *RequestHandler) ServePublicKey(w http.ResponseWriter, r *http.Request) {
+	keyBytes, _ := x509.MarshalPKIXPublicKey(s.Config.PublicKey)
 	block := &pem.Block{
 		Type:  "PUBLIC KEY",
-		Bytes: x509.MarshalPKCS1PublicKey(s.Config.PublicKey),
+		Bytes: keyBytes,
 	}
 
 	pub := &bytes.Buffer{}
@@ -164,6 +153,6 @@ func timerMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		t := time.Now()
 		h.ServeHTTP(w, r)
-		log.Print("request: ", time.Since(t))
+		log.Info().Dur("requestDuration", time.Since(t)).Msg("")
 	})
 }

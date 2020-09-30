@@ -2,7 +2,6 @@ package mock
 
 import (
 	"encoding/json"
-	"log"
 
 	"github.com/PlatformOfTrust/connector-accuweather/accuweather"
 	"github.com/PlatformOfTrust/connector-accuweather/models"
@@ -17,7 +16,6 @@ func (s *GeoPositionService) Get(_ *models.Location) (string, error) {
 
 	err := json.Unmarshal([]byte(exampleGeoPosition), &response)
 	if err != nil {
-		log.Print(err)
 		return "", err
 	}
 
@@ -34,7 +32,6 @@ func (s *ForecastService) Get(p *models.Params) ([]models.Forecast, error) {
 		var res []accuweather.CurrentCondition
 		err := json.Unmarshal([]byte(exampleCurrentWeather), &res)
 		if err != nil {
-			log.Print(err)
 			return nil, err
 		}
 		return res[0].MapToPot(), nil
@@ -43,7 +40,6 @@ func (s *ForecastService) Get(p *models.Params) ([]models.Forecast, error) {
 	var fc accuweather.Forecast
 	err := json.Unmarshal([]byte(example1DayForecast), &fc)
 	if err != nil {
-		log.Print(err)
 		return nil, err
 	}
 

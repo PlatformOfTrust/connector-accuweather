@@ -1,7 +1,6 @@
 package accuweather
 
 import (
-	"log"
 	"time"
 
 	"github.com/PlatformOfTrust/connector-accuweather/models"
@@ -162,7 +161,6 @@ type CurrentCondition struct {
 }
 
 func (f CurrentCondition) MapToPot() []models.Forecast {
-	log.Print(f)
 	return []models.Forecast{
 		models.Forecast{
 			CloudCoverage:   f.CloudCover,

@@ -8,7 +8,6 @@ import (
 	"net/url"
 
 	"github.com/PlatformOfTrust/connector-accuweather/models"
-	"github.com/rs/zerolog/log"
 
 	jsoniter "github.com/json-iterator/go"
 )
@@ -28,7 +27,6 @@ func (s *GeoPositionService) Get(l *models.Location) (string, error) {
 
 	resp, err := http.Get(url.String())
 	if err != nil {
-		log.Print(err)
 		return "", err
 	}
 
@@ -38,12 +36,10 @@ func (s *GeoPositionService) Get(l *models.Location) (string, error) {
 
 	err = json.Unmarshal(body, &response)
 	if err != nil {
-		log.Print(err)
 		return "", err
 	}
 
 	if response.Key == "" {
-		log.Print(err)
 		return "", errors.New("No key found")
 	}
 
@@ -91,7 +87,6 @@ func (s *ForecastService) Get(p *models.Params) ([]models.Forecast, error) {
 
 	resp, err := http.Get(url.String())
 	if err != nil {
-		log.Print(err)
 		return []models.Forecast{}, err
 	}
 
@@ -101,7 +96,6 @@ func (s *ForecastService) Get(p *models.Params) ([]models.Forecast, error) {
 		var fc []CurrentCondition
 		err = decoder.Decode(&fc)
 		if err != nil {
-			log.Print(err)
 			return []models.Forecast{}, err
 		}
 		return fc[0].MapToPot(), nil
@@ -109,7 +103,6 @@ func (s *ForecastService) Get(p *models.Params) ([]models.Forecast, error) {
 	var fc Forecast
 	err = decoder.Decode(&fc)
 	if err != nil {
-		log.Print(err)
 		return []models.Forecast{}, err
 	}
 

@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"net/http"
 
+	"context"
+
 	"github.com/alecthomas/jsonschema"
 	"github.com/go-chi/chi"
-	"github.com/goreleaser/goreleaser/pkg/context"
 	jsc "github.com/qri-io/jsonschema"
 )
 
 var schemas = make(map[string][]byte)
 
 func init() {
-	jsonschema.Version = "http://json-schema.org/draft-07/schema#"
+	jsonschema.Version = "http://json-schema.org/draft-06/schema#"
 
-	// schema, _ := jsonschema.Reflect(&models.RequestParameters{}).MarshalJSON()
+	//schema, _ := jsonschema.Reflect(&models.RequestParameters{}).MarshalJSON()
 	schema := []byte(requestSchema)
 	schemas["/schemas/params"] = schema
 
@@ -69,7 +70,7 @@ func (e ValidationError) Error() string {
 func validateSchema(schemaName string, data []byte) error {
 	schema := schemas[schemaName]
 
-	ctx := context.Context{}
+	ctx := context.TODO()
 
 	rs := &jsc.Schema{}
 	err := json.Unmarshal(schema, rs)
@@ -84,5 +85,5 @@ func validateSchema(schemaName string, data []byte) error {
 		}
 	}
 
-	return nil
+	return err
 }

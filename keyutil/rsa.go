@@ -22,7 +22,7 @@ func LoadRsaKeys(keys []string) ([]*rsa.PublicKey, error) {
 	res := []*rsa.PublicKey{}
 
 	for _, key := range keys {
-		rsaKey, err := LoadRsaKey(key)
+		rsaKey, err := LoadRsaPublicKey(key)
 		if err != nil {
 			return res, err
 		}
@@ -32,7 +32,7 @@ func LoadRsaKeys(keys []string) ([]*rsa.PublicKey, error) {
 	return res, nil
 }
 
-func LoadRsaKey(key string) (*rsa.PublicKey, error) {
+func LoadRsaPublicKey(key string) (*rsa.PublicKey, error) {
 	keyType := ParseKeyType(key)
 	switch keyType {
 	case rsaKeyURL:
@@ -62,6 +62,15 @@ func LoadRsaKeyFile(path string) (*rsa.PublicKey, error) {
 	return ParsePEM(key)
 }
 
+func LoadRsaPrivateKeyFile(path string) (*rsa.PrivateKey, error) {
+	key, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return ParsePrivateKey(key)
+}
+
 func FetchRsaKey(url string) (*rsa.PublicKey, error) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -89,4 +98,19 @@ func ParsePEM(c []byte) (*rsa.PublicKey, error) {
 	}
 
 	return rsaPublicKey, nil
+}
+
+func ParsePrivateKey(c []byte) (*rsa.PrivateKey, error) {
+	block, _ := pem.Decode(c)
+
+	cert, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	rsaPrivateKey, ok := cert.(*rsa.PrivateKey)
+	if !ok {
+		return nil, errors.New("invalid public key")
+	}
+
+	return rsaPrivateKey, nil
 }
