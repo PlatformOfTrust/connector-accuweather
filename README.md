@@ -10,7 +10,9 @@ docker build -t pot-accuweather .
 
 ## Running
 
-NOTE THAT THE **ACCUWEATHER_TOKEN** AND **POT_SECRET** ENVIRONMENT VARIABLES HAS TO BE SET FOR THE CONNECTOR TO WORK!
+NOTE THAT THE **ACCUWEATHER_TOKEN** ENVIRONMENT VARIABLE HAS TO BE SET FOR THE CONNECTOR TO WORK!
+
+The public key to validate the response signature is provided from the following path: `/public-key`
 
 ### Basic
 ```
@@ -38,11 +40,15 @@ PORT=8080
 # The access token that will be used to fetch data from the accuweather APIs
 ACCUWEATHER_TOKEN={get the token from your accuweather account}
 
-# The secret that will be used for the payload signing and validation
-POT_SECRET={platform of trust secret for the connector}
+# A file path to a private key to use when signing the responses from the connector.
+# The public key will be generated from the private key so no need to provide it.
+# If not provided a private key will be generated when the connector starts.
+PRIVATE_KEY={/path/to/private.key}
 
-# The URI of the public key that will be used for the signature payload of the response
-POT_CREATOR=https://example.com/public-key
+# The key that will be used for the payload signature verification.
+# Can be either a url or a file path. To use an url it must start with either http:// or https://.
+# Will fallback for predefined list of keys if not provided.
+POT_PUBLIC_KEY={platform of trust public key}
 
 # The URI of the context that will be used for the data payload 
 POT_RESPONSE_CONTEXT=https://standards.oftrust.net/v2/Context/DataProductOutput/Forecast/Weather/AccuWeather/

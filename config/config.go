@@ -28,17 +28,14 @@ func New() *Config {
 		log.Warn().Msg("No .env file found")
 	}
 
-	privateKey, _ := rsa.GenerateKey(rand.Reader, 4096)
-
-	publicKeys, err := keyutil.LoadRsaKeys([]string{
-		"https://static.oftrust.net/keys/translator.pub",
-		"https://static-sandbox.oftrust.net/keys/translator.pub",
-		"https://static-staging.oftrust.net/keys/translator.pub",
-		"https://static-test.oftrust.net/keys/translator.pub",
-	})
-
+	privateKey, err := loadPrivateKey()
 	if err != nil {
-		log.Warn().Msg("Failed to load some of the public keys")
+		log.Warn().Msg("Failed to load the private key")
+	}
+
+	publicKeys, err := loadPublicKeys()
+	if err != nil {
+		log.Warn().Msg("Failed to load public keys")
 	}
 
 	return &Config{
@@ -68,4 +65,25 @@ func ReadEnv(v string, defaultValue string) string {
 	}
 
 	return defaultValue
+}
+
+func loadPublicKeys() ([]*rsa.PublicKey, error) {
+	if key := ReadEnv("POT_PUBLIC_KEY", ""); key != "" {
+		return keyutil.LoadRsaKeys([]string{key})
+	}
+
+	return keyutil.LoadRsaKeys([]string{
+		"https://static.oftrust.net/keys/translator.pub",
+		"https://static-sandbox.oftrust.net/keys/translator.pub",
+		"https://static-staging.oftrust.net/keys/translator.pub",
+		"https://static-test.oftrust.net/keys/translator.pub",
+	})
+}
+
+func loadPrivateKey() (*rsa.PrivateKey, error) {
+	if key := ReadEnv("PRIVATE_KEY", ""); key != "" {
+		return keyutil.LoadRsaPrivateKeyFile(key)
+	}
+
+	return rsa.GenerateKey(rand.Reader, 4096)
 }

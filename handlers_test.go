@@ -50,8 +50,16 @@ func createTestRouter(conf *config.Config) http.Handler {
 }
 
 var fetchRequestTestBody = `{
-	"@context":"https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather/AccuWeather/",
-	"parameters":{}
+	"@context": "https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather/AccuWeather/",
+	"timestamp": "2020-05-08T07:00:00+03:00",
+	"productCode": "12309843",
+	"parameters": {
+		"timeFrame": 0,
+		"location": {
+			"latitude": 60.1983,
+			"longtitude": 24.9416
+		}
+	}
 }`
 var fetchRequestTestResponse = `{"data":{"forecasts":[{"cloudCoverage":100,"dateTime":"2020-04-28T15:26:00+03:00","humidity":49,"rainProbability":0,"rainVolume":0,"snowProbability":0,"snowVolume":0,"temperature":4.9,"temperatureFeel":-0.1,"temperatureMax":7.7,"temperatureMaxFeel":-0.1,"temperatureMin":2,"temperatureMinFeel":-0.1,"windDirection":158,"windSpeed":5.9444447}]},"@context":"https://standards.oftrust.net/v2/Context/DataProductOutput/Forecast/Weather/AccuWeather/","signature":{"created":"2020-09-30T23:24:30+03:00","creator":"http:///public-key","signatureValue":"---REDACTED---","type":"RsaSignature2018"}}`
 
