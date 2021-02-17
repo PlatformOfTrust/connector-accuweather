@@ -12,7 +12,7 @@ docker build -t pot-accuweather .
 
 NOTE THAT THE **ACCUWEATHER_TOKEN** ENVIRONMENT VARIABLE HAS TO BE SET FOR THE CONNECTOR TO WORK!
 
-The public key to validate the response signature is provided from the following path: `/public-key`
+The public key to validate the response signature is provided from the following path: `/public.key`
 
 ### Basic
 ```
