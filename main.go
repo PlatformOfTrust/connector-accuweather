@@ -39,6 +39,10 @@ func main() {
 		r.Post("/", rs.Fetch)
 	})
 	router.Get("/public.key", rs.ServePublicKey)
+
+	// legacy path for compatibility
+	router.Get("/public-key", rs.ServePublicKey)
+
 	router.Get("/health", healthCheck)
 
 	server := http.Server{
