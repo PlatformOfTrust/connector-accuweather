@@ -31,6 +31,7 @@ var requestSchema string = `
 			"properties": {
 				"period": {
 					"type": "number",
+					"enum": [0,1,5,10,15],
 					"description": "Defines the time frame for the forecast in days. If set to 0 will return the current weather information. Will fallback to 0 if not provided."
 				},
 				"targetObject": {

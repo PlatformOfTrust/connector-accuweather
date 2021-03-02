@@ -32,9 +32,14 @@ type ResponseError struct {
 }
 
 func writeError(w http.ResponseWriter, err error, msg string, errcode int) {
-	log.Error().Err(err).Msg(msg)
+	log.Error().
+		Str("type", "request_error").
+		Err(err).
+		Int("status", errcode).
+		Str("statusText", http.StatusText(errcode)).
+		Msg(msg)
 	res := &ResponseError{
-		Error:  fmt.Sprintf("%s: %s", http.StatusText(errcode), msg),
+		Error:  fmt.Sprintf("%s: %s: %s", http.StatusText(errcode), msg, err.Error()),
 		Status: errcode,
 	}
 	jdata, _ := json.Marshal(res)
@@ -62,7 +67,7 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 		errStr := ""
 		if !validationResult.Valid() {
 			for _, e := range validationResult.Errors() {
-				errStr += e.String() + e.Description()
+				errStr += e.String()
 			}
 		}
 		writeError(w, errors.New(errStr), "failed to validate the request", 400)
