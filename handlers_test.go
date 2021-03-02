@@ -37,7 +37,7 @@ var fetchRequestTestBody = `{
 	"timestamp": "2020-05-08T07:00:00+03:00",
 	"productCode": "12309843",
 	"parameters": {
-		"period": 2,
+		"period": 0,
 		"targetObject": {
 			"latitude": 60.1983,
 			"longitude": 24.9416
