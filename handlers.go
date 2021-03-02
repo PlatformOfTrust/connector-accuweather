@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/PlatformOfTrust/connector-accuweather/config"
 	"github.com/PlatformOfTrust/connector-accuweather/models"
 	"github.com/holdatech/gopot/v4"
+	"github.com/xeipuuv/gojsonschema"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/rs/zerolog/log"
@@ -49,29 +49,30 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	schemaLoader := gojsonschema.NewStringLoader(requestSchema)
+	bodyLoader := gojsonschema.NewBytesLoader(rbody)
+
+	// validate the params
+	validationResult, err := gojsonschema.Validate(schemaLoader, bodyLoader)
+	if err != nil {
+		writeError(w, err, "failed to validate the request", 400)
+		return
+	}
+	if !validationResult.Valid() {
+		errStr := ""
+		if !validationResult.Valid() {
+			for _, e := range validationResult.Errors() {
+				errStr += e.String() + e.Description()
+			}
+		}
+		writeError(w, errors.New(errStr), "failed to validate the request", 400)
+	}
+
 	// Decode the request body
 	req := &models.RequestParameters{}
 	err = json.Unmarshal(rbody, req)
 	if err != nil {
 		writeError(w, err, "failed to parse the request", 400)
-		return
-	}
-
-	// validate the context
-	if strings.TrimSuffix(req.Context, "/") != strings.TrimSuffix(s.Config.ParameterContext, "/") {
-		writeError(w, nil, "context mismatch", 400)
-		return
-	}
-
-	// validate the params
-	err = validateParams(req)
-	if err != nil {
-		if errors.As(err, &ValidationError{}) {
-			writeError(w, err, fmt.Sprintf("failed to validate the request: %s", err.Error()), 400)
-			return
-		}
-
-		writeError(w, err, "failed to validate the request", 500)
 		return
 	}
 

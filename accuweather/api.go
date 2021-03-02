@@ -52,7 +52,7 @@ type ForecastService struct {
 }
 
 func (s *ForecastService) Get(p *models.Params) ([]models.Forecast, error) {
-	locationKey, err := s.GeoPosition.Get(&p.Location)
+	locationKey, err := s.GeoPosition.Get(&p.TargetObject)
 	if err != nil {
 		return []models.Forecast{}, err
 	}
@@ -60,7 +60,7 @@ func (s *ForecastService) Get(p *models.Params) ([]models.Forecast, error) {
 	baseUrl := "https://dataservice.accuweather.com/forecasts/v1/daily"
 
 	var uri string
-	switch p.TimeFrame {
+	switch p.Period {
 	case 1:
 		uri = fmt.Sprintf("%s/%s/%s", baseUrl, "1day", locationKey)
 		break
@@ -92,7 +92,7 @@ func (s *ForecastService) Get(p *models.Params) ([]models.Forecast, error) {
 
 	decoder := json.NewDecoder(resp.Body)
 
-	if p.TimeFrame == 0 {
+	if p.Period == 0 {
 		var fc []CurrentCondition
 		err = decoder.Decode(&fc)
 		if err != nil {

@@ -16,19 +16,19 @@ const (
 
 type Location struct {
 	Lat float32 `json:"latitude" validate:"required"`
-	Lng float32 `json:"longtitude" validate:"required"`
+	Lng float32 `json:"longitude" validate:"required"`
 }
 
 type RequestParameters struct {
 	ResponseContext
-	Parameters  Params    `json:"parameters" validate:"required"`
+	Parameters  Params    `json:"parameters" jsonschema:"required"`
 	ProductCode string    `json:"productCode" validate:"required"`
 	Timestamp   time.Time `json:"timestamp" validate:"required"`
 }
 
 type Params struct {
-	Location  Location `json:"location" validate:"required" jsonschema:"required,description=The coordinates of the location that the forecast will be fetched. Will find the nearest weather station to this location."`
-	TimeFrame int      `json:"timeFrame" validate:"oneof=0 1 5 10 15" jsonschema:"enum=0,enum=1,enum=5,enum=10,enum=15,description=Defines the time frame for the forecast in days. If set to 0 will return the current weather information. Will fallback to 0 if not provided."`
+	TargetObject Location `json:"targetObject" jsonschema:"required,description=The coordinates of the location that the forecast will be fetched. Will find the nearest weather station to this location."`
+	Period       int      `json:"period" validate:"oneof=0 1 5 10 15" jsonschema:"enum=0,enum=1,enum=5,enum=10,enum=15,description=Defines the time frame for the forecast in days. If set to 0 will return the current weather information. Will fallback to 0 if not provided."`
 }
 
 type ResponseContext struct {

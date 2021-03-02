@@ -28,7 +28,7 @@ type ForecastService struct {
 }
 
 func (s *ForecastService) Get(p *models.Params) ([]models.Forecast, error) {
-	if p.TimeFrame == 0 {
+	if p.Period == 0 {
 		var res []accuweather.CurrentCondition
 		err := json.Unmarshal([]byte(exampleCurrentWeather), &res)
 		if err != nil {

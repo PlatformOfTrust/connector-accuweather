@@ -35,9 +35,9 @@ type Forecast struct {
 	Temp            float32   `json:"temperature" jsonschema:"required,description=Average temperature in celsius"`
 	TempFeel        float32   `json:"temperatureFeel" jsonschema:"description=Average feels like temperature in celsius"`
 	TempMax         float32   `json:"temperatureMax" jsonschema:"description=Maximum temperature in celsius"`
-	TempMaxFeel     float32   `json:"temperatureMaxFeel" jsonschema:"description=Maximum feels like temperature in celsius"`
+	TempMaxFeel     float32   `json:"temperatureFeelMax" jsonschema:"description=Maximum feels like temperature in celsius"`
 	TempMin         float32   `json:"temperatureMin" jsonschema:"description=Minimum temperature in celsius"`
-	TempMinFeel     float32   `json:"temperatureMinFeel" jsonschema:"description=Minimum feels like temperature in celsius"`
+	TempMinFeel     float32   `json:"temperatureFeelMin" jsonschema:"description=Minimum feels like temperature in celsius"`
 	WindDirection   float32   `json:"windDirection" jsonschema:"description=Wind direction in degrees"`
 	WindSpeed       float32   `json:"windSpeed" jsonschema:"description=Wind speed in m/s"`
 }

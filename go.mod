@@ -16,4 +16,5 @@ require (
 	github.com/qri-io/jsonpointer v0.1.1 // indirect
 	github.com/qri-io/jsonschema v0.2.0
 	github.com/rs/zerolog v1.19.0
+	github.com/xeipuuv/gojsonschema v1.2.0
 )

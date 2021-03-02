@@ -14,7 +14,7 @@ var requestSchema string = `
 		"@context": {
 			"type": "string",
 			"description": "The context to be used for the payload.",
-			"const": "https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather/"
+			"const": "https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather"
 		},
 		"timestamp": {
 			"type": "string",

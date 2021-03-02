@@ -10,20 +10,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func main() {
-	conf := config.New()
-
-	// Initialize the handler with provided services
-	rs := RequestHandler{
-		Config: conf,
-		ForecastService: &accuweather.ForecastService{
-			Token: conf.AccuweatherToken,
-			GeoPosition: &accuweather.GeoPositionService{
-				Token: conf.AccuweatherToken,
-			},
-		},
-	}
-
+func newApiRouter(rs RequestHandler, conf *config.Config) http.Handler {
 	signatureVerifier := gopot.SignatureVerifierMiddleware(conf.PotPublicKeys)
 
 	router := chi.NewRouter()
@@ -38,12 +25,32 @@ func main() {
 		}
 		r.Post("/", rs.Fetch)
 	})
+
 	router.Get("/public.key", rs.ServePublicKey)
 
 	// legacy path for compatibility
 	router.Get("/public-key", rs.ServePublicKey)
 
 	router.Get("/health", healthCheck)
+
+	return router
+}
+
+func main() {
+	conf := config.New()
+
+	// Initialize the handler with provided services
+	rs := RequestHandler{
+		Config: conf,
+		ForecastService: &accuweather.ForecastService{
+			Token: conf.AccuweatherToken,
+			GeoPosition: &accuweather.GeoPositionService{
+				Token: conf.AccuweatherToken,
+			},
+		},
+	}
+
+	router := newApiRouter(rs, conf)
 
 	server := http.Server{
 		Addr:    ":" + conf.Port,
