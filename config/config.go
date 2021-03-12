@@ -47,11 +47,11 @@ func New() *Config {
 		AccuweatherToken: ReadEnv("ACCUWEATHER_TOKEN", ""),
 		ResponseContext: ReadEnv(
 			"POT_RESPONSE_CONTEXT",
-			"https://standards.oftrust.net/v2/Context/DataProductOutput/Forecast/Weather/AccuWeather/",
+			"https://standards.oftrust.net/v2/Context/DataProductOutput/Forecast/Weather/AccuWeather/?v=2.0",
 		),
 		ParameterContext: ReadEnv(
 			"POT_PARAMETER_CONTEXT",
-			"https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather/AccuWeather/",
+			"https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather/?v=2.0",
 		),
 	}
 

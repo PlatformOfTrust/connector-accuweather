@@ -33,7 +33,7 @@ func createTestRouter(conf *config.Config) http.Handler {
 }
 
 var fetchRequestTestBody = `{
-	"@context": "https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather",
+	"@context": "https://standards.oftrust.net/v2/Context/DataProductParameters/Forecast/Weather/?v=2.0",
 	"timestamp": "2020-05-08T07:00:00+03:00",
 	"productCode": "12309843",
 	"parameters": {
@@ -44,7 +44,7 @@ var fetchRequestTestBody = `{
 		}
 	}
 }`
-var fetchRequestTestResponse = `{"data":{"forecasts":[{"cloudCoverage":100,"dateTime":"2020-04-28T15:26:00+03:00","humidity":49,"rainProbability":0,"rainVolume":0,"snowProbability":0,"snowVolume":0,"temperature":4.9,"temperatureFeel":-0.1,"temperatureMax":7.7,"temperatureFeelMax":-0.1,"temperatureMin":2,"temperatureFeelMin":-0.1,"windDirection":158,"windSpeed":5.9444447}]},"@context":"https://standards.oftrust.net/v2/Context/DataProductOutput/Forecast/Weather/AccuWeather/","signature":{"created":"2020-09-30T23:24:30+03:00","creator":"http:///public-key","signatureValue":"---REDACTED---","type":"RsaSignature2018"}}`
+var fetchRequestTestResponse = `{"data":{"forecasts":[{"cloudCoverage":100,"dateTime":"2020-04-28T15:26:00+03:00","humidity":49,"rainProbability":0,"rainVolume":0,"snowProbability":0,"snowVolume":0,"temperature":4.9,"temperatureFeel":-0.1,"temperatureMax":7.7,"temperatureFeelMax":-0.1,"temperatureMin":2,"temperatureFeelMin":-0.1,"windDirection":158,"windSpeed":5.9444447}]},"@context":"https://standards.oftrust.net/v2/Context/DataProductOutput/Forecast/Weather/AccuWeather/?v=2.0","signature":{"created":"2020-09-30T23:24:30+03:00","creator":"http:///public-key","signatureValue":"---REDACTED---","type":"RsaSignature2018"}}`
 
 func TestFetchHandler(t *testing.T) {
 	seed := mrand.NewSource(1)
