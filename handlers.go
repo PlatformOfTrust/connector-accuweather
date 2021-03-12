@@ -71,6 +71,7 @@ func (s *RequestHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		writeError(w, errors.New(errStr), "failed to validate the request", 400)
+		return
 	}
 
 	// Decode the request body
